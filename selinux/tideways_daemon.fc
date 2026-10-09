@@ -1,0 +1,2 @@
+/usr/bin/tideways-daemon -- gen_context(system_u:object_r:tideways_daemon_exec_t,s0)
+/run/tideways(/.*)? gen_context(system_u:object_r:httpd_var_run_t,s0)

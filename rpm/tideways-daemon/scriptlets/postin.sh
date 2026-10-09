@@ -16,10 +16,15 @@ commonInstallUpgrade() {
   chmod 0644 /etc/logrotate.d/tideways-daemon
 
   chmod a+x /usr/bin/tideways-daemon
+
+  if command -v selinuxenabled >/dev/null 2>&1 && selinuxenabled; then
+    semodule -i /usr/share/selinux/packages/tideways_daemon.pp || return 1
+    restorecon -RF /usr/bin/tideways-daemon /run/tideways || return 1
+  fi
 }
 
 cleanInstall() {
-  commonInstallUpgrade
+  commonInstallUpgrade || return 1
 
   # Step 3 (clean install), enable the service in the proper way for this platform
   if [ "${use_systemctl}" = "True" ]; then
@@ -33,7 +38,7 @@ cleanInstall() {
 
 upgrade() {
   # Step 3(upgrade), do what you need
-  commonInstallUpgrade
+  commonInstallUpgrade || return 1
 
   if [ "${use_systemctl}" = "True" ]; then
     systemctl --system daemon-reload >/dev/null || true

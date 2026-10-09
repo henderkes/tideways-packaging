@@ -1,0 +1,12 @@
+policy_module(tideways_daemon, 1.0)
+
+type tideways_daemon_t;
+type tideways_daemon_exec_t;
+init_daemon_domain(tideways_daemon_t, tideways_daemon_exec_t)
+unconfined_domain(tideways_daemon_t)
+
+gen_require(`
+    type httpd_t;
+')
+
+allow httpd_t tideways_daemon_t:unix_stream_socket connectto;
