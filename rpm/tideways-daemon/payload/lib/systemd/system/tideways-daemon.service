@@ -1,0 +1,18 @@
+[Unit]
+Description=Tideways Daemon
+After=network.target
+
+[Service]
+Type=simple
+User=tideways
+Environment=TIDEWAYS_DAEMON_LOGFILE=/var/log/tideways/daemon.log
+Environment=TIDEWAYS_SOURCE=package
+EnvironmentFile=-/etc/default/tideways-daemon
+ExecStart=/usr/bin/tideways-daemon --log=${TIDEWAYS_DAEMON_LOGFILE} $TIDEWAYS_DAEMON_EXTRA
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/run/tideways
+ExecStartPre=/bin/chown tideways: /var/run/tideways
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
